@@ -1,0 +1,10 @@
+<li href="#" class="list-group-item row" id="topic-{{ topic.id }}">
+    <div class="col-xs-5 title"><a class="title one-line" href="topic/{{ topic.id }}/{{ topic.slug }}">{{ topic.title }}</a></div>
+    <div class="col-xs-2"><a href="category/{{ category.id }}/{{ category.slug }}" class="badge-wrapper bullet one-line"><span class="badge-category-bg" style="background-color: {{ category.color }}"></span> <span class="badge-category clear-badge">{{ category.name }}</span></a></div>
+    <div class="col-xs-2">
+        <a class="user-card" href="user/{{ u.id }}" data-ng-repeat="(k,u) in activeUsers" title="{{ u.display_name }} - {{ k | underscoreRemove | capitalize }}" style="background-color: {{ getColorFromString(u.id) }}">{{ u.display_name | firstChar }}</a>
+    </div>
+    <div class="col-xs-1">{{ topic.comment_count }}</div>
+    <div class="col-xs-1 views">{{ topic.view_count }}</div>
+    <div class="col-xs-1 date"><span title="{{ lastActivity }}" class="one-line">{{ getActivityDisplayDate({c: current}) }}</span></div>
+</li>

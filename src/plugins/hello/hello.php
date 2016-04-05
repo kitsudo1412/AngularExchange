@@ -1,0 +1,2 @@
+<?php
+// Demo plugin

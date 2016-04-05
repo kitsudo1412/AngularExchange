@@ -1,0 +1,144 @@
+<div class="topic">
+    <div id="topic-title" data-topic-id="{{ topic.id }}" ng-init="getAllData()">
+        <h1>
+            <a href="topic/{{ topic.id }}/{{ topic.slug }}">
+                <span class="private-message-glyph" data-ng-show="topic.is_private_message == '1'"><i class="fa fa-envelope"></i></span>
+                {{ topic.title }}
+            </a>
+        </h1>
+        <div class="topic-category">
+            <a class="badge-wrapper bullet" href="category/{{ category.id }}/{{ category.slug }}">
+                <span class="badge-category-bg" style="background-color: {{ category.color }}"></span>
+                <span class="badge-category clear-badge">{{ category.name }}</span>
+            </a>
+        </div>
+    </div>
+
+    <div infinite-scroll='posts.nextPage()' infinite-scroll-disabled='posts.busy' infinite-scroll-distance='1'>
+        <div class="topic-post" ng-repeat='item in posts.items'>
+            <article>
+                <div class="row">
+                    <div class="topic-avatar"><a class="trigger-user-card main-avatar" href="/users/cameronbr"
+                                                 data-user-card="cameronbr"><img alt="" width="45" height="45"
+                                                                                 src="https://avatars.discourse.org/v2/letter/c/73ab20/45.png"
+                                                                                 title="cameronbr" class="avatar"></a>
+                        <div class="poster-avatar-extra"></div>
+                    </div>
+                    <div class="topic-body">
+                        <div class="topic-meta-data">
+                            <div class="names trigger-user-card"><span class="username"><a href="/users/cameronbr"
+                                                                                           data-auto-route="true"
+                                                                                           data-user-card="cameronbr">cameronbr</a></span>
+                            </div>
+                            <div class="post-info"><a href="/t/online-learning/108"
+                                                      data-share-url="/t/online-learning/108" data-post-number="1"
+                                                      class="post-date"><span title="February 5, 2013 9:53pm"
+                                                                              data-time="1360076017883"
+                                                                              data-format="tiny" class="relative-date">Feb '13</span></a>
+                            </div>
+                            <div class="post-info edits"><a title="post last edited on February 5, 2013 9:53pm">1 <i
+                                    class="fa fa-pencil" aria-hidden="true"></i></a></div>
+                            <div class="read-state read" title="Post is unread"><i class="fa fa-circle"
+                                                                                   aria-hidden="true"></i></div>
+                        </div>
+                        <div class="regular contents">
+                            <div class="cooked"><p>I've been really into online learning recently. Part of the reason is
+                                because I don't think that the high-quality online classes will be free forever. Here
+                                are a few of the big players in the arena:</p>
+
+                                <p><strong>Coursera:</strong><br><a href="https://www.coursera.org" class="onebox"
+                                                                    target="_blank" rel="nofollow">https://www.coursera.org</a>
+                                </p>
+
+                                <p><strong>Udacity:</strong><br><a href="https://www.udacity.com" class="onebox"
+                                                                   target="_blank" rel="nofollow">https://www.udacity.com</a>
+                                </p>
+
+                                <p><strong>edX:</strong><br><a href="https://www.edx.org" class="onebox" target="_blank"
+                                                               rel="nofollow">https://www.edx.org</a></p>
+
+                                <p>I've taken two classes through edX. They are:</p>
+
+                                <p><strong>Introduction to Computer Science and Programming:</strong><br><a
+                                        href="https://www.edx.org/courses/MITx/6.00x/2013_Spring/about" class="onebox"
+                                        target="_blank" rel="nofollow">https://www.edx.org/courses/MITx/6.00x/2013_Spring/about</a>
+                                </p>
+
+                                <p>and <strong>Artificial Intelligence:</strong><br><a
+                                        href="https://www.edx.org/courses/BerkeleyX/CS188.1x/2013_Spring/about"
+                                        class="onebox" target="_blank" rel="nofollow">https://www.edx.org/courses/BerkeleyX/CS188.1x/2013_Spring/about</a>
+                                </p>
+
+                                <p>I mainly signed up for the Intro class because I wanted to learn python. The AI class
+                                    was taught using python. Since I already know how to program in several other
+                                    languages, I found that I didn't need the Intro class at all, so I eventually
+                                    dropped it. The lectures were good, however, and I think it would be a great class
+                                    for somebody just starting out. </p>
+
+                                <p>The AI class was taught by UC Berkeley professors and was excellent. I highly
+                                    recommend it. Word is that the 2nd part of it will be taught next fall -- I'll
+                                    definitely sign up for that.</p></div>
+                            <section class="post-menu-area clearfix">
+                                <nav class="post-controls clearfix">
+                                    <div class="actions">
+                                        <button aria-label="share a link to this post" title="share a link to this post"
+                                                data-share-url="/t/online-learning/108" data-post-number="1"
+                                                class="widget-button"><i class="fa fa-link" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </nav>
+                            </section>
+                        </div>
+                        <section class="post-actions"></section>
+                        <div class="topic-map">
+                            <nav class="buttons">
+                                <button class="widget-button btn" aria-label="toggle topic details"
+                                        title="toggle topic details"><i class="fa fa-chevron-down"
+                                                                        aria-hidden="true"></i></button>
+                            </nav>
+                            <section class="map map-collapsed">
+                                <ul class="clearfix">
+                                    <li><h4>created</h4><a class="trigger-user-card " data-user-card="cameronbr"><img
+                                            alt="" width="20" height="20"
+                                            src="https://avatars.discourse.org/v2/letter/c/73ab20/20.png"
+                                            title="cameronbr" class="avatar"></a><span title="February 5, 2013 9:53pm"
+                                                                                       data-time="1360076017449"
+                                                                                       data-format="tiny"
+                                                                                       class="relative-date">Feb '13</span>
+                                    </li>
+                                    <li><a href="/t/online-learning/108/3"><h4>last reply</h4><a
+                                            class="trigger-user-card " data-user-card="cameronbr"><img alt="" width="20"
+                                                                                                       height="20"
+                                                                                                       src="https://avatars.discourse.org/v2/letter/c/73ab20/20.png"
+                                                                                                       title="cameronbr"
+                                                                                                       class="avatar"></a><span
+                                            title="February 6, 2013 1:39am" data-time="1360089563028" data-format="tiny"
+                                            class="relative-date">Feb '13</span></a></li>
+                                    <li><span class="number">2</span><h4>replies</h4></li>
+                                    <li class="secondary"><span class="number">52</span><h4>views</h4></li>
+                                    <li class="secondary"><span class="number">2</span><h4>users</h4></li>
+                                    <li class="secondary"><span class="number">0</span><h4></h4></li>
+                                    <li class="secondary"><span class="number">6</span><h4>links</h4></li>
+                                    <li class="avatars">
+                                        <div><a class="poster" title="cameronbr"><img alt="" width="32" height="32"
+                                                                                      src="https://avatars.discourse.org/v2/letter/c/73ab20/32.png"
+                                                                                      title="cameronbr" class="avatar"></a>
+                                        </div>
+                                        <div><a class="poster" title="Hanzo"><img alt="" width="32" height="32"
+                                                                                  src="https://cdn-business.discourse.org/user_avatar/try2.discourse.org/hanzo/32/216_1.png"
+                                                                                  title="Hanzo" class="avatar"></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="gutter">
+                        <ul class="post-links"></ul>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div ng-show='posts.busy'>Loading data...</div>
+    </div>
+</div>

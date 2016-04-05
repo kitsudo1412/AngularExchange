@@ -1,0 +1,20 @@
+<div id="category-select">
+    <div class="current-category" data-ng-click="showCategoryList = !showCategoryList"><span class="one-line">{{ categoryJSON.id == 0 ? 'all categories' : categoryJSON.name }} <i class="fa fa-caret-down"></i></span></div>
+    <div class="category-list-show" data-ng-show="showCategoryList">
+        <a class="category-list-item one-line" href="category/0" style="line-height: 30px">all categories</a>
+        <a class="category-list-item one-line" data-ng-repeat="category in categoryList.categories" href="category/{{ category.id }}/{{ category.slug }}"><span class="badge-category-bg" style="background-color: {{ category.color }}"></span> {{ category.name }}</a>
+    </div>
+</div>
+<div class="clear"></div>
+<ul class="list-group topic-list">
+    <li href="#" class="list-group-item row">
+        <div class="col-xs-5"><strong>Topic title</strong></div>
+        <div class="col-xs-2"><strong>Category</strong></div>
+        <div class="col-xs-2"><strong>Users</strong></div>
+        <div class="col-xs-1"><strong>Replies</strong></div>
+        <div class="col-xs-1"><strong>Views</strong></div>
+        <div class="col-xs-1"><strong>Activity</strong></div>
+    </li>
+    <li category-topic-item data-last-activity="{{ lastActivity }}" data-topic="t" data-category="{{ category }}" data-category-slug="{{ categoryJSON.slug }}" data-category-name="{{ categoryJSON.name }}" data-ng-repeat="t in categoryJSON.topics" data-func-get-active-users="getActiveUsers(u1, u2, u3, u4)" data-get-activity-display-date="getActivityDisplayDate(c)" data-current="current"></li>
+    <li class="list-group-item row" data-ng-show="!categoryJSON.topics.length">There is no topic in this category</li>
+</ul>
