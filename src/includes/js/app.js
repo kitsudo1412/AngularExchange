@@ -1,5 +1,5 @@
 // MODULE
-var app = angular.module('angularExchangeApp', ['ngRoute', 'ngResource', 'infinite-scroll']);
+var app = angular.module('angularExchangeApp', ['ngRoute', 'ngResource', 'infinite-scroll', 'ngSanitize']);
 
 // ROUTES
 app.config(function ($routeProvider, $locationProvider) {
@@ -59,22 +59,79 @@ app.filter('firstChar', function () {
     }
 });
 
+app.filter('relativeDate', function () {
+    return function (dateTimeString) {
+        var previous = new Date(dateTimeString);
+        var current = new Date();
+        if (previous == 'Invalid Date')
+            return dateTimeString;
+
+        var msPerMinute = 60 * 1000;
+        var msPerHour = msPerMinute * 60;
+        var msPerDay = msPerHour * 24;
+        var msPerMonth = msPerDay * 30;
+
+        var elapsed = current - previous;
+
+        if (elapsed < msPerMinute) {
+            return '<1m';
+        }
+
+        else if (elapsed < msPerHour) {
+            return Math.round(elapsed / msPerMinute) + 'm';
+        }
+
+        else if (elapsed < msPerDay) {
+            return Math.round(elapsed / msPerHour) + 'h';
+        }
+
+        else if (elapsed < msPerMonth) {
+            return Math.round(elapsed / msPerDay) + 'd';
+        }
+
+        else {
+            var monthNames = ["Jan'", "Feb'", "Mar'", "Apr'", "May", "Jun'",
+                "Jul'", "Aug'", "Sep'", "Oct'", "Nov'", "Dec'"
+            ];
+
+            return monthNames[previous.getMonth()] + " " + previous.getDay();
+        }
+    }
+});
+
+app.filter('textToColor', function () {
+    return function (v_string) {
+        if (v_string == null || v_string.length == 0)
+            return "#000000";
+        var correspond_num = parseInt(v_string);
+        if (isNaN(correspond_num)) correspond_num = v_string.charCodeAt(0);
+
+        correspond_num = parseInt(correspond_num * correspond_num * correspond_num * 8985362) % 16777216;
+        correspond_num = correspond_num.toString(16);
+        while (correspond_num.length < 6)
+            correspond_num += correspond_num;
+        correspond_num = correspond_num.substr(0, 6);
+        return '#' + correspond_num;
+    };
+});
+
 //SERVICES & FACTORIES
-app.factory('Reddit', function($http) {
-    var Reddit = function() {
+app.factory('Reddit', function ($http) {
+    var Reddit = function () {
         this.items = [];
         this.busy = false;
         this.after = '';
     };
 
-    Reddit.prototype.nextPage = function() {
+    Reddit.prototype.nextPage = function () {
         if (this.busy) return;
         this.busy = true;
 
         var url = "https://api.reddit.com/hot?after=" + this.after + "&jsonp=JSON_CALLBACK";
-        $http.jsonp(url).success(function(data) {
+        $http.jsonp(url).success(function (data) {
             var items = data.data.children;
             for (var i = 0; i < items.length; i++) {
+                items[i].data['a123'] = 44545;
                 this.items.push(items[i].data);
             }
             this.after = "t3_" + this.items[this.items.length - 1].id;
@@ -85,33 +142,61 @@ app.factory('Reddit', function($http) {
     return Reddit;
 });
 
-app.factory('LoadPosts', ['$http', function($http){
-    var LoadPosts = function(topic_id) {
+app.factory('LoadPosts', ['$http', 'TopicFactory', function ($http, TopicFactory) {
+    var LoadPosts = function (topic_id) {
         this.topic_id = topic_id;
         this.items = [];
         this.busy = false;
         this.after = 0;
     };
 
-    LoadPosts.prototype.nextPage = function() {
+    LoadPosts.prototype.nextPage = function () {
         if (this.busy) return;
         this.busy = true;
 
         var url = "json/q.php?type=topic&show_posts=1&id=" + this.topic_id + "&limit=3&offset=" + this.after;
 
-        $http({method: 'GET', url: url}).success(function(data) {
+        $http({method: 'GET', url: url}).success(function (data) {
             var items = data.posts;
 
             for (var i = 0; i < items.length; i++) {
-                this.items.push(items[i]);
-                console.log(items[i]);
+                var topicService = new TopicFactory(items[i]);
+                this.items.push(topicService);
             }
-            this.after = this.items.length - 1;
+            this.after = this.items.length;
             this.busy = false;
         }.bind(this));
     };
 
     return LoadPosts;
+}]);
+
+app.factory('TopicFactory', ['$sce', '$http', function ($sce, $http) {
+    function TopicFactory(json_attr_array) {
+        for (var json_attr in json_attr_array) {
+
+            if (json_attr_array.hasOwnProperty(json_attr))
+                this[json_attr] = json_attr_array[json_attr];
+        }
+
+        if (this.hasOwnProperty('author')) {
+            var factory_scope = this;
+            $http({
+                method: 'GET',
+                url: "json/q.php",
+                params: {type: 'user', id: this.author}
+            }).then(function (response) {
+                factory_scope.author = response.data;
+            }, function () {
+            });
+        }
+    }
+
+    TopicFactory.prototype.Foo = function () {
+        return this.author;
+    };
+
+    return TopicFactory;
 }]);
 
 //CONTROLLERS
@@ -120,15 +205,20 @@ app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http
 
     $scope.api = $resource("json/q.php");
 
-    $scope.getAllData = function() {
-        $http({method: 'GET', url: "json/q.php", params: {type: 'topic', show_posts: 1, id: $scope.topicId} }).then(function (topic_data) {
+    $scope.getAllData = function () {
+        $http({
+            method: 'GET',
+            url: "json/q.php",
+            params: {type: 'topic', show_posts: 1, id: $scope.topicId}
+        }).then(function (topic_data) {
             $scope.topic = topic_data.data;
 
             $scope.category = $scope.api.get({
                 type: 'category',
                 id: topic_data.data.category
             });
-        }, function() {});
+        }, function () {
+        });
 
         $scope.posts = new LoadPosts($scope.topicId);
     }

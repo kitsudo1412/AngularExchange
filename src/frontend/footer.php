@@ -9,6 +9,7 @@ defined('AE') or die('Access is denied'); ?>
 <script src="<?php echo get_js_directory_uri(); ?>/angular-route.min.js"></script>
 <script src="<?php echo get_js_directory_uri(); ?>/angular-resource.min.js"></script>
 <script src="<?php echo get_js_directory_uri(); ?>/ng-infinite-scroll.min.js"></script>
+<script src="<?php echo get_js_directory_uri(); ?>/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="<?php echo get_js_directory_uri(); ?>/app.js"></script>
 <?php do_action('ae_footer'); ?>
 </body>
