@@ -43,9 +43,23 @@
                             <section class="post-menu-area clearfix">
                                 <nav class="post-controls clearfix">
                                     <div class="actions">
+                                        <button class="widget-button toggle-like like d-hover"
+                                                aria-label="like this post" title="like this post"><i
+                                                class="fa fa-heart" aria-hidden="true"></i></button>
                                         <button aria-label="share a link to this post" title="share a link to this post"
-                                                data-share-url="/t/online-learning/108" data-post-number="1"
-                                                class="widget-button"><i class="fa fa-link" aria-hidden="true"></i>
+                                                data-share-url="/t/testing-details-tags/340?u=dao_tu_n_anh"
+                                                data-post-number="1" class="widget-button"><i class="fa fa-link"
+                                                                                              aria-hidden="true"></i>
+                                        </button>
+                                        <button class="widget-button create-flag"
+                                                aria-label="privately flag this post for attention or send a private notification about it"
+                                                title="privately flag this post for attention or send a private notification about it">
+                                            <i class="fa fa-flag" aria-hidden="true"></i>
+                                        </button>
+                                        <button class="widget-button reply create fade-out"
+                                                aria-label="begin composing a reply to this post"
+                                                title="begin composing a reply to this post"><i class="fa fa-reply"
+                                                                                                aria-hidden="true"></i>Reply
                                         </button>
                                     </div>
                                 </nav>
@@ -53,11 +67,6 @@
                         </div>
                         <section class="post-actions"></section>
                         <div class="topic-map" ng-show="$index == 0">
-                            <nav class="buttons">
-                                <button class="widget-button btn" aria-label="toggle topic details"
-                                        title="toggle topic details"><i class="fa fa-chevron-down"
-                                                                        aria-hidden="true"></i></button>
-                            </nav>
                             <section class="map map-collapsed">
                                 <ul class="clearfix">
                                     <li><h4>created</h4><a class="trigger-user-card " data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a><span title="February 5, 2013 9:53pm"
@@ -66,11 +75,7 @@
                                                                                        class="relative-date">{{ item.created | relativeDate }}</span>
                                     </li>
                                     <li><a href="/t/online-learning/108/3"><h4>last reply</h4><a
-                                            class="trigger-user-card " data-user-card="cameronbr"><img alt="" width="20"
-                                                                                                       height="20"
-                                                                                                       src="https://avatars.discourse.org/v2/letter/c/73ab20/20.png"
-                                                                                                       title="cameronbr"
-                                                                                                       class="avatar"></a><span
+                                            class="trigger-user-card " data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a><span
                                             title="February 6, 2013 1:39am" data-time="1360089563028" data-format="tiny"
                                             class="relative-date">{{ item.created | relativeDate }}</span></a></li>
                                     <li><span class="number">{{ item.reply_count || 0 }}</span><h4>replies</h4></li>
@@ -78,13 +83,8 @@
                                     <li class="secondary"><span class="number">{{ item.user_count || 0 }}</span><h4>users</h4></li>
                                     <li class="secondary"><span class="number">{{ item.link_count || 0 }}</span><h4>links</h4></li>
                                     <li class="avatars">
-                                        <div><a class="poster" title="cameronbr"><img alt="" width="32" height="32"
-                                                                                      src="https://avatars.discourse.org/v2/letter/c/73ab20/32.png"
-                                                                                      title="cameronbr" class="avatar"></a>
-                                        </div>
-                                        <div><a class="poster" title="Hanzo"><img alt="" width="32" height="32"
-                                                                                  src="https://cdn-business.discourse.org/user_avatar/try2.discourse.org/hanzo/32/216_1.png"
-                                                                                  title="Hanzo" class="avatar"></a>
+                                        <div ng-repeat="activeUser in topicActiveUsers">
+                                            <a class="poster" title="cameronbr" style="background-color: {{ activeUser.id | textToColor }}">{{ activeUser.display_name | firstChar }}</a>
                                         </div>
                                     </li>
                                 </ul>

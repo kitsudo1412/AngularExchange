@@ -187,8 +187,7 @@ app.factory('TopicFactory', ['$sce', '$http', function ($sce, $http) {
                 params: {type: 'user', id: this.author}
             }).then(function (response) {
                 factory_scope.author = response.data;
-            }, function () {
-            });
+            }, function () { });
         }
     }
 
@@ -212,6 +211,29 @@ app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http
             params: {type: 'topic', show_posts: 1, id: $scope.topicId}
         }).then(function (topic_data) {
             $scope.topic = topic_data.data;
+
+            $scope.topicActiveUsers = {};
+
+            if ($scope.topic.original_poster) {
+                $http({url: "json/q.php", params: {type: 'user', id: $scope.original_poster}}).then(function(response){
+                    $scope.topicActiveUsers['original_poster'] = response.data;
+                }, function() {});
+            }
+            if ($scope.topic.frequent_poster_1) {
+                $http({url: "json/q.php", params: {type: 'user', id: $scope.frequent_poster_1}}).then(function(response){
+                    $scope.topicActiveUsers['frequent_poster_1'] = response.data;
+                }, function() {});
+            }
+            if ($scope.topic.frequent_poster_2) {
+                $http({url: "json/q.php", params: {type: 'user', id: $scope.frequent_poster_2}}).then(function(response){
+                    $scope.topicActiveUsers['frequent_poster_2'] = response.data;
+                }, function() {});
+            }
+            if ($scope.topic.most_recent_poster) {
+                $http({url: "json/q.php", params: {type: 'user', id: $scope.most_recent_poster}}).then(function(response){
+                    $scope.topicActiveUsers['most_recent_poster'] = response.data;
+                }, function() {});
+            }
 
             $scope.category = $scope.api.get({
                 type: 'category',
