@@ -1,4 +1,4 @@
-<div class="topic">
+<div class="topic" ng-controller="topicController">
     <div id="topic-title" data-topic-id="{{ topic.id }}" ng-init="getAllData()">
         <h1>
             <a href="topic/{{ topic.id }}/{{ topic.slug }}">
@@ -15,88 +15,29 @@
     </div>
 
     <div infinite-scroll='posts.nextPage()' infinite-scroll-disabled='posts.busy' infinite-scroll-distance='1'>
-        <div class="topic-post" ng-repeat='item in posts.items'>
-            <article>
-                <div class="row">
-                    <div class="topic-avatar"><a class="trigger-user-card main-avatar" href="user/{{ item.author.id }}"
-                                                 data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a>
-                    </div>
-                    <div class="topic-body">
-                        <div class="topic-meta-data">
-                            <div class="names trigger-user-card"><span class="username"><a href="user/{{ item.author.id }}"
-                                                                                           data-auto-route="true"
-                                                                                           data-user-card="{{ item.author.id }}">{{ item.author.display_name }}</a></span>
-                            </div>
-                            <div class="post-info"><a href="/t/online-learning/108"
-                                                      data-share-url="/t/online-learning/108" data-post-number="1"
-                                                      class="post-date"><span title="February 5, 2013 9:53pm"
-                                                                              data-time="1360076017883"
-                                                                              data-format="tiny" class="relative-date">{{ item.modified | relativeDate }}</span></a>
-                            </div>
-                            <div class="post-info edits"><a title="post last edited on February 5, 2013 9:53pm">1 <i
-                                    class="fa fa-pencil" aria-hidden="true"></i></a></div>
-                            <div class="read-state read" title="Post is unread"><i class="fa fa-circle"
-                                                                                   aria-hidden="true"></i></div>
-                        </div>
-                        <div class="regular contents">
-                            <div class="cooked" ng-bind-html="item.content"></div>
-                            <section class="post-menu-area clearfix">
-                                <nav class="post-controls clearfix">
-                                    <div class="actions">
-                                        <button class="widget-button toggle-like like d-hover"
-                                                aria-label="like this post" title="like this post"><i
-                                                class="fa fa-heart" aria-hidden="true"></i></button>
-                                        <button aria-label="share a link to this post" title="share a link to this post"
-                                                data-share-url="/t/testing-details-tags/340?u=dao_tu_n_anh"
-                                                data-post-number="1" class="widget-button"><i class="fa fa-link"
-                                                                                              aria-hidden="true"></i>
-                                        </button>
-                                        <button class="widget-button create-flag"
-                                                aria-label="privately flag this post for attention or send a private notification about it"
-                                                title="privately flag this post for attention or send a private notification about it">
-                                            <i class="fa fa-flag" aria-hidden="true"></i>
-                                        </button>
-                                        <button class="widget-button reply create fade-out"
-                                                aria-label="begin composing a reply to this post"
-                                                title="begin composing a reply to this post"><i class="fa fa-reply"
-                                                                                                aria-hidden="true"></i>Reply
-                                        </button>
-                                    </div>
-                                </nav>
-                            </section>
-                        </div>
-                        <section class="post-actions"></section>
-                        <div class="topic-map" ng-show="$index == 0">
-                            <section class="map map-collapsed">
-                                <ul class="clearfix">
-                                    <li><h4>created</h4><a class="trigger-user-card " data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a><span title="February 5, 2013 9:53pm"
-                                                                                       data-time="1360076017449"
-                                                                                       data-format="tiny"
-                                                                                       class="relative-date">{{ item.created | relativeDate }}</span>
-                                    </li>
-                                    <li><a href="/t/online-learning/108/3"><h4>last reply</h4><a
-                                            class="trigger-user-card " data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a><span
-                                            title="February 6, 2013 1:39am" data-time="1360089563028" data-format="tiny"
-                                            class="relative-date">{{ item.created | relativeDate }}</span></a></li>
-                                    <li><span class="number">{{ item.reply_count || 0 }}</span><h4>replies</h4></li>
-                                    <li class="secondary"><span class="number">{{ item.view_count || 0 }}</span><h4>views</h4></li>
-                                    <li class="secondary"><span class="number">{{ item.user_count || 0 }}</span><h4>users</h4></li>
-                                    <li class="secondary"><span class="number">{{ item.link_count || 0 }}</span><h4>links</h4></li>
-                                    <li class="avatars">
-                                        <div ng-repeat="activeUser in topicActiveUsers">
-                                            <a class="poster" title="cameronbr" style="background-color: {{ activeUser.id | textToColor }}">{{ activeUser.display_name | firstChar }}</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </section>
-                        </div>
-                    </div>
-                    <div class="gutter">
-                        <ul class="post-links"></ul>
-                    </div>
-                </div>
-            </article>
-        </div>
+        <post-detail class="topic-post" ng-repeat='item in posts.items' item="item" category="category" topic-active-users="topicActiveUsers" first-item="$index == 0"></post-detail>
         <div ng-show='posts.busy'>Loading data...</div>
+    </div>
+
+    <div id="topic-footer">
+        <div id="topic-closing-info" class="ember-view"></div>
+        <div id="topic-footer-buttons" class="ember-view">
+            <div id="topic-footer-main-buttons" class="ember-view">
+                <button id="ember2124" class="ember-view bookmark btn standard"
+                        title="Click to bookmark the first post on this topic"><i class="fa fa-bookmark"></i>Bookmark
+                </button>
+                <button id="ember2125" class="ember-view share btn standard" title="share a link to this topic"
+                        data-share-url="/t/can-i-find-stuff-while-writing-replies/55?u=dao_tu_n_anh"><i
+                        class="fa fa-link"></i>Share
+                </button>
+                <button id="ember2126" class="ember-view flag-topic btn standard"
+                        title="privately flag this topic for attention or send a private notification about it"><i
+                        class="fa fa-flag"></i>Flag
+                </button>
+                <button id="ember2127" class="ember-view btn btn-primary create standard"
+                        title="begin composing a reply to this topic" data-ng-click="reply()"><i class="fa fa-reply"></i>Reply
+                </button>
+            </div>
+        </div>
     </div>
 </div>

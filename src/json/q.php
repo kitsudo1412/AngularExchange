@@ -38,3 +38,9 @@ if (isset($_GET['type']))
             break;
     }
 }
+
+if (isset($_POST['type']))
+{
+    // handle post requests
+    print_r($user_info);
+}

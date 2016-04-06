@@ -1,5 +1,5 @@
 // MODULE
-var app = angular.module('angularExchangeApp', ['ngRoute', 'ngResource', 'infinite-scroll', 'ngSanitize']);
+var app = angular.module('angularExchangeApp', ['ngRoute', 'ngResource', 'infinite-scroll', 'ngSanitize', 'textAngular']);
 
 // ROUTES
 app.config(function ($routeProvider, $locationProvider) {
@@ -187,7 +187,8 @@ app.factory('TopicFactory', ['$sce', '$http', function ($sce, $http) {
                 params: {type: 'user', id: this.author}
             }).then(function (response) {
                 factory_scope.author = response.data;
-            }, function () { });
+            }, function () {
+            });
         }
     }
 
@@ -198,8 +199,32 @@ app.factory('TopicFactory', ['$sce', '$http', function ($sce, $http) {
     return TopicFactory;
 }]);
 
+app.factory('ComposerSharedData', function () {
+    var data = {
+        show: false,
+        target_topic: 0
+    };
+
+    return {
+        isComposerShown: function () {
+            return data.show;
+        },
+        setComposerShown: function (show_composer) {
+            data.show = show_composer;
+        },
+
+        getTargetTopic: function () {
+            return data.target_topic;
+        },
+
+        setTargetTopic: function (topic_id) {
+            data.target_topic = topic_id;
+        }
+    }
+});
+
 //CONTROLLERS
-app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http', 'LoadPosts', function ($scope, $resource, $routeParams, $http, LoadPosts) {
+app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http', 'LoadPosts', 'ComposerSharedData', function ($scope, $resource, $routeParams, $http, LoadPosts, ComposerSharedData) {
     $scope.topicId = ($routeParams.id) ? $routeParams.id : 0;
 
     $scope.api = $resource("json/q.php");
@@ -215,24 +240,40 @@ app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http
             $scope.topicActiveUsers = {};
 
             if ($scope.topic.original_poster) {
-                $http({url: "json/q.php", params: {type: 'user', id: $scope.original_poster}}).then(function(response){
+                $http({
+                    url: "json/q.php",
+                    params: {type: 'user', id: $scope.original_poster}
+                }).then(function (response) {
                     $scope.topicActiveUsers['original_poster'] = response.data;
-                }, function() {});
+                }, function () {
+                });
             }
             if ($scope.topic.frequent_poster_1) {
-                $http({url: "json/q.php", params: {type: 'user', id: $scope.frequent_poster_1}}).then(function(response){
+                $http({
+                    url: "json/q.php",
+                    params: {type: 'user', id: $scope.frequent_poster_1}
+                }).then(function (response) {
                     $scope.topicActiveUsers['frequent_poster_1'] = response.data;
-                }, function() {});
+                }, function () {
+                });
             }
             if ($scope.topic.frequent_poster_2) {
-                $http({url: "json/q.php", params: {type: 'user', id: $scope.frequent_poster_2}}).then(function(response){
+                $http({
+                    url: "json/q.php",
+                    params: {type: 'user', id: $scope.frequent_poster_2}
+                }).then(function (response) {
                     $scope.topicActiveUsers['frequent_poster_2'] = response.data;
-                }, function() {});
+                }, function () {
+                });
             }
             if ($scope.topic.most_recent_poster) {
-                $http({url: "json/q.php", params: {type: 'user', id: $scope.most_recent_poster}}).then(function(response){
+                $http({
+                    url: "json/q.php",
+                    params: {type: 'user', id: $scope.most_recent_poster}
+                }).then(function (response) {
                     $scope.topicActiveUsers['most_recent_poster'] = response.data;
-                }, function() {});
+                }, function () {
+                });
             }
 
             $scope.category = $scope.api.get({
@@ -243,6 +284,11 @@ app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http
         });
 
         $scope.posts = new LoadPosts($scope.topicId);
+    };
+
+    $scope.reply = function () {
+        ComposerSharedData.setTargetTopic($scope.topic.id);
+        ComposerSharedData.setComposerShown(true);
     }
 }]);
 
@@ -263,7 +309,79 @@ app.controller('categoryController', ['$scope', '$resource', '$routeParams', fun
     });
 }]);
 
+app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', function ($scope, ComposerSharedData, $http) {
+    $scope.is_open = ComposerSharedData.isComposerShown();
+    $scope.target_topic = {};
+    $scope.target_id = 0;
+    $scope.message = "Default message";
+
+    $scope.$watch(function () {
+        return ComposerSharedData.isComposerShown();
+    }, function (newValue, oldValue) {
+        if (newValue !== oldValue) $scope.is_open = newValue;
+    });
+
+    $scope.$watch(function () {
+        return ComposerSharedData.getTargetTopic();
+    }, function (newValue, oldValue) {
+
+        if (newValue !== oldValue) {
+            $scope.target_id = newValue;
+
+            $http({
+                method: 'GET',
+                url: 'json/q.php',
+                params: {type: 'topic', id: $scope.target_id}
+            }).then(function (response) {
+                $scope.target_topic = response.data;
+                console.log($scope.target_topic);
+            }, function () {
+            });
+        }
+    });
+}]);
+
 // DIRECTIVES
+app.directive('aeComposer', ['ComposerSharedData', function (ComposerSharedData) {
+    return {
+        templateUrl: 'frontend/directives/composer.html',
+        replace: true,
+        controller: 'composerController',
+        scope: {},
+        link: function (scope, element, attrs, controller) {
+            element.find('#composer-close').bind('click', function () {
+                scope.is_open = false;
+                scope.$apply();
+            });
+
+            scope.$watch('is_open', function (newValue, oldValue) {
+                ComposerSharedData.setComposerShown(newValue);
+                if (newValue) {
+                    element.addClass('open');
+                    $('body').addClass('composer-padding');
+                }
+                else {
+                    element.removeClass('open');
+                    $('body').removeClass('composer-padding');
+                }
+            }, true);
+        }
+    }
+}]);
+
+app.directive('postDetail', function () {
+    return {
+        templateUrl: 'frontend/directives/post-detail.html',
+        replace: false,
+        scope: {
+            item: '=',
+            topicActiveUsers: '=',
+            category: '=',
+            firstItem: '='
+        }
+    }
+});
+
 app.directive('categoryTopicItem', function () {
     return {
         templateUrl: 'frontend/directives/category-topic-item.html',

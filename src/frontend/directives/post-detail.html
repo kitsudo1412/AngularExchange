@@ -1,0 +1,80 @@
+<article>
+    <div class="row">
+        <div class="topic-avatar"><a class="trigger-user-card main-avatar" href="user/{{ item.author.id }}"
+                                     data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a>
+        </div>
+        <div class="topic-body">
+            <div class="topic-meta-data">
+                <div class="names trigger-user-card"><span class="username"><a href="user/{{ item.author.id }}"
+                                                                               data-auto-route="true"
+                                                                               data-user-card="{{ item.author.id }}">{{ item.author.display_name }}</a></span>
+                </div>
+                <div class="post-info"><a href="/t/online-learning/108"
+                                          data-share-url="/t/online-learning/108" data-post-number="1"
+                                          class="post-date"><span title="February 5, 2013 9:53pm"
+                                                                  data-time="1360076017883"
+                                                                  data-format="tiny" class="relative-date">{{ item.modified | relativeDate }}</span></a>
+                </div>
+                <div class="post-info edits"><a title="post last edited on February 5, 2013 9:53pm">1 <i
+                        class="fa fa-pencil" aria-hidden="true"></i></a></div>
+                <div class="read-state read" title="Post is unread"><i class="fa fa-circle"
+                                                                       aria-hidden="true"></i></div>
+            </div>
+            <div class="regular contents">
+                <div class="cooked" ng-bind-html="item.content"></div>
+                <section class="post-menu-area clearfix">
+                    <nav class="post-controls clearfix">
+                        <div class="actions">
+                            <button class="widget-button toggle-like like d-hover"
+                                    aria-label="like this post" title="like this post"><i
+                                    class="fa fa-heart" aria-hidden="true"></i></button>
+                            <button aria-label="share a link to this post" title="share a link to this post"
+                                    data-share-url="/t/testing-details-tags/340?u=dao_tu_n_anh"
+                                    data-post-number="1" class="widget-button"><i class="fa fa-link"
+                                                                                  aria-hidden="true"></i>
+                            </button>
+                            <button class="widget-button create-flag"
+                                    aria-label="privately flag this post for attention or send a private notification about it"
+                                    title="privately flag this post for attention or send a private notification about it">
+                                <i class="fa fa-flag" aria-hidden="true"></i>
+                            </button>
+                            <button class="widget-button reply create fade-out"
+                                    aria-label="begin composing a reply to this post"
+                                    title="begin composing a reply to this post"><i class="fa fa-reply"
+                                                                                    aria-hidden="true"></i>Reply
+                            </button>
+                        </div>
+                    </nav>
+                </section>
+            </div>
+            <section class="post-actions"></section>
+            <div class="topic-map" ng-show="firstItem">
+                <section class="map map-collapsed">
+                    <ul class="clearfix">
+                        <li><h4>created</h4><a href="user/{{ item.author.id }}" class="trigger-user-card " data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a><span title="February 5, 2013 9:53pm"
+                                                                                                                                                                                                                                                                  data-time="1360076017449"
+                                                                                                                                                                                                                                                                  data-format="tiny"
+                                                                                                                                                                                                                                                                  class="relative-date">{{ item.created | relativeDate }}</span>
+                        </li>
+                        <li><a href="/t/online-learning/108/3"><h4>last reply</h4><a
+                                class="trigger-user-card " data-user-card="{{ item.author.id }}" style="background-color: {{ item.author.id | textToColor }}">{{ item.author.display_name | firstChar }}</a><span
+                                title="February 6, 2013 1:39am" data-time="1360089563028" data-format="tiny"
+                                class="relative-date">{{ item.created | relativeDate }}</span></a></li>
+                        <li><span class="number">{{ item.reply_count || 0 }}</span><h4>replies</h4></li>
+                        <li class="secondary"><span class="number">{{ item.view_count || 0 }}</span><h4>views</h4></li>
+                        <li class="secondary"><span class="number">{{ item.user_count || 0 }}</span><h4>users</h4></li>
+                        <li class="secondary"><span class="number">{{ item.link_count || 0 }}</span><h4>links</h4></li>
+                        <li class="avatars">
+                            <div ng-repeat="(k, activeUser) in topicActiveUsers">
+                                <a class="poster" title="{{ k }}" style="background-color: {{ activeUser.id | textToColor }}" href="user/{{ activeUser.id }}">{{ activeUser.display_name | firstChar }}</a>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        <div class="gutter">
+            <ul class="post-links"></ul>
+        </div>
+    </div>
+</article>

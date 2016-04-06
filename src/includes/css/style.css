@@ -27,6 +27,32 @@ a:hover, a:focus {
     text-decoration: none;
 }
 
+.btn {
+    display: inline-block;
+    margin: 0;
+    padding: 6px 12px;
+    font-weight: 500;
+    font-size: 1em;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.btn {
+    border: none;
+    color: #222;
+    font-weight: normal;
+    background: #e9e9e9;
+}
+
+.btn-primary {
+    border: none;
+    font-weight: normal;
+    color: #fff;
+    background: #08c;
+}
+
 .clear {
     clear: both;
 }
@@ -513,4 +539,52 @@ nav.post-controls button.like:hover {
     line-height: 32px;
     text-align: center;
     font-size: 20px;
+}
+
+#composer {
+    transition: height 0.4s ease;
+    width: 100%;
+    z-index: 999;
+    height: 0;
+    background-color: #e9e9e9;
+    bottom: 0;
+    font-size: 1em;
+    position: fixed;
+    overflow: auto;
+}
+
+#composer.open {
+    height: 300px;
+}
+
+#composer-close {
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    top: 10px;
+}
+
+#composer .target-topic {
+    text-align: center;
+    font-size: 12px;
+    padding: 6px 0;
+}
+
+body.composer-padding {
+    padding-bottom: 300px;
+}
+
+#topic-closing-info {
+    border-top: 1px solid #e9e9e9;
+    padding-top: 10px;
+    height: 20px;
+}
+
+#topic-footer-buttons {
+    padding: 10px 10px 0 0;
+}
+
+#topic-footer-buttons .btn {
+    margin-bottom: 5px;
+    margin-right: 10px;
 }
