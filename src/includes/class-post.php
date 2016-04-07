@@ -144,11 +144,14 @@ final class AE_Post
     {
         if ($this->id == 0)
         {
-            db_post_submit($this->topic, $this->author, $this->content, $this->ip);
+            $insert_id = db_post_submit($this->topic, $this->author, $this->content, $this->ip);
             db_user_post_count_increment($this->author);
 
             $this_topic = $this->get_topic();
             $this_topic->update_statistics();
+
+            return $insert_id;
         }
+        return 0;
     }
 }

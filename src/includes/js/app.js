@@ -164,20 +164,26 @@ app.factory('LoadPosts', ['$http', 'TopicFactory', function ($http, TopicFactory
                 this.items.push(topicService);
             }
             this.after = this.items.length;
+
             this.busy = false;
+
+            // this.busy = items.length == 0;
         }.bind(this));
     };
 
-    LoadPosts.prototype.addCustomPost = function(post_id, post_topic, post_author, post_content, post_created, post_modified, post_like_count) {
+    LoadPosts.prototype.addCustomPost = function (custom_post) {
+
         this.items.push(new TopicFactory({
-            id: post_id,
-            topic: post_topic,
-            author: post_author,
-            content: post_content,
-            created: post_created,
-            modified: post_modified,
-            like_count: post_like_count
+            id: custom_post.id,
+            topic: custom_post.topic,
+            author: custom_post.author,
+            content: custom_post.content,
+            created: custom_post.created,
+            modified: custom_post.modified,
+            like_count: custom_post.like_count
         }));
+
+        console.log(this.items);
     };
 
     return LoadPosts;
@@ -327,7 +333,7 @@ app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', '
     $scope.target_id = 0;
     $scope.message = "";
 
-    $scope.submit = function() {
+    $scope.submit = function () {
         $http({
             method: 'POST',
             url: 'json/q.php',
@@ -341,7 +347,6 @@ app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', '
 
         $scope.message = "";
         ComposerSharedData.setComposerShown(false);
-
     };
 
     $scope.$watch(function () {
@@ -383,14 +388,16 @@ app.directive('aeComposer', ['ComposerSharedData', function (ComposerSharedData)
             });
 
             scope.$watch('is_open', function (newValue, oldValue) {
-                ComposerSharedData.setComposerShown(newValue);
-                if (newValue) {
-                    element.addClass('open');
-                    $('body').addClass('composer-padding');
-                }
-                else {
-                    element.removeClass('open');
-                    $('body').removeClass('composer-padding');
+                if (newValue != oldValue) {
+                    ComposerSharedData.setComposerShown(newValue);
+                    if (newValue) {
+                        element.addClass('open');
+                        $('body').addClass('composer-padding');
+                    }
+                    else {
+                        element.removeClass('open');
+                        $('body').removeClass('composer-padding');
+                    }
                 }
             }, true);
         }
