@@ -13,7 +13,6 @@ else
 $user_info = get_token_info($access_token);
 
 if(!$user_info) die("Access Token Invalid!");
-
 header('Content-Type: application/json');
 if (isset($_GET['type']))
 {
@@ -37,10 +36,15 @@ if (isset($_GET['type']))
         default:
             break;
     }
-}
-
-if (isset($_POST['type']))
+} elseif (isset($_POST['type']))
 {
     // handle post requests
-    print_r($user_info);
+    switch($_POST['type'])
+    {
+        case 'post':
+            include 'action_post_create.php';
+            break;
+        default:
+            break;
+    }
 }

@@ -38,7 +38,7 @@ function db_post_update_content($id, $new_content)
 
 function db_post_like_increment($id)
 {
-    DB::query("UPDATE TABLE `ae_posts` SET `like_count` = `like_count` + 1 WHERE `id` = {$id}");
+    DB::query("UPDATE `ae_posts` SET `like_count` = `like_count` + 1 WHERE `id` = {$id}");
 }
 
 function db_post_add_like($id, $user)
@@ -51,7 +51,7 @@ function db_post_add_like($id, $user)
 
 function db_post_like_minus($id)
 {
-    DB::query("UPDATE TABLE `ae_posts` SET `like_count` = `like_count` - 1 WHERE `id` = {$id}");
+    DB::query("UPDATE `ae_posts` SET `like_count` = `like_count` - 1 WHERE `id` = {$id}");
 }
 
 function db_post_remove_like($post, $user)
@@ -75,6 +75,22 @@ function db_post_get_likes($post, $offset, $num)
 function db_post_delete($post_id)
 {
     DB::delete('ae_posts', "id=%d", $post_id);
+}
+
+function db_post_submit($topic_id, $author_id, $content, $ip)
+{
+    try {
+        $insert_id = DB::insert('ae_posts', array(
+            'topic' => $topic_id,
+            'author' => $author_id,
+            'content' => $content,
+            'ip' => $ip
+        ));
+    } catch (MeekroDBException $e) {
+        $insert_id = '-1';
+    }
+
+    return $insert_id;
 }
 
 /* USER */
@@ -113,42 +129,42 @@ function db_user_change_email_address($user_id, $new_email_address)
 
 function db_user_post_count_increment($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `post_count` = `post_count` + 1 WHERE `id` = {$user_id}");
+    DB::query("UPDATE `ae_users` SET `post_count` = `post_count` + 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_post_count_minus($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `post_count` = `post_count` - 1 WHERE `id` = {$user_id}");
+    DB::query(" `ae_users` SET `post_count` = `post_count` - 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_topic_count_increment($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `topic_count` = `topic_count` + 1 WHERE `id` = {$user_id}");
+    DB::query(" `ae_users` SET `topic_count` = `topic_count` + 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_topic_count_minus($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `topic_count` = `topic_count` - 1 WHERE `id` = {$user_id}");
+    DB::query(" `ae_users` SET `topic_count` = `topic_count` - 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_likes_given_increment($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `likes_given` = `likes_given` + 1 WHERE `id` = {$user_id}");
+    DB::query("UPDATE `ae_users` SET `likes_given` = `likes_given` + 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_likes_given_minus($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `likes_given` = `likes_given` - 1 WHERE `id` = {$user_id}");
+    DB::query("UPDATE `ae_users` SET `likes_given` = `likes_given` - 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_likes_received_increment($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `likes_received` = `likes_received` + 1 WHERE `id` = {$user_id}");
+    DB::query("UPDATE `ae_users` SET `likes_received` = `likes_received` + 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_likes_received_minus($user_id)
 {
-    DB::query("UPDATE TABLE `ae_users` SET `likes_received` = `likes_received` - 1 WHERE `id` = {$user_id}");
+    DB::query("UPDATE `ae_users` SET `likes_received` = `likes_received` - 1 WHERE `id` = {$user_id}");
 }
 
 function db_user_get_posts($user_id, $offset = 0, $num = 10)
@@ -161,7 +177,7 @@ function db_user_get_topics($user_id, $offset = 0, $num = 10)
     return DB::query("SELECT * FROM `ae_topics` WHERE `original_poster` = %d LIMIT %d OFFSET %d", $user_id, $num, $offset);
 }
 
-function db_user_get_notifications($user_id, $offset =0, $num = 5)
+function db_user_get_notifications($user_id, $offset = 0, $num = 5)
 {
     return DB::query("SELECT * FROM `ae_notifications` WHERE `user` = %d LIMIT %d OFFSET %d", $user_id, $num, $offset);
 }
@@ -188,7 +204,7 @@ function db_user_delete($user_id)
 
 function db_user_insert($user)
 {
-    $user=get_object_vars($user);
+    $user = get_object_vars($user);
     try {
         $insert_id = DB::insert('ae_users',
             array(
@@ -198,8 +214,7 @@ function db_user_insert($user)
                 'role' => $user['role'],
                 'email' => $user['email'],
             ));
-    }
-    catch (MeekroDBException $e) {
+    } catch (MeekroDBException $e) {
         $insert_id = '-1';
     }
     return $insert_id;
@@ -213,7 +228,7 @@ function db_user_update($user_id, $login, $pass, $display_name, $role, $email)
         'display_name' => $display_name,
         'role' => $role,
         'email' => $email
-    ),'id=%d', $user_id);
+    ), 'id=%d', $user_id);
 }
 
 /* CATEGORY */
@@ -252,14 +267,13 @@ function db_category_insert($category_name)
     $category_slug = generate_slug($category_name);
     $suffix_number = 0;
 
-    while (true)
-    {
+    while (true) {
         $suffix_number++;
         $hypothetical_row = DB::queryFirstField("SELECT `id` FROM `ae_categories` WHERE `slug` = %s", $category_slug);
         if ($hypothetical_row == null)
             break;
         else
-            $category_slug = generate_slug($category_name).'-'.$suffix_number;
+            $category_slug = generate_slug($category_name) . '-' . $suffix_number;
     }
 
     $random_color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
@@ -276,8 +290,7 @@ function db_category_update_slug($category_id, $new_slug)
     $category_slug = generate_slug($new_slug);
     $suffix_number = 0;
 
-    while (true)
-    {
+    while (true) {
         $suffix_number++;
         $hypothetical_row = DB::queryFirstField("SELECT `id` FROM `ae_categories` WHERE `slug` = %s", $category_slug);
 
@@ -287,7 +300,7 @@ function db_category_update_slug($category_id, $new_slug)
         if ($hypothetical_row == null)
             break;
         else
-            $category_slug = generate_slug($new_slug).'-'.$suffix_number;
+            $category_slug = generate_slug($new_slug) . '-' . $suffix_number;
     }
 
     DB::update('ae_categories', array(
@@ -337,17 +350,17 @@ function db_topic_change_title($topic_id, $new_topic_title)
 
 function db_topic_view_count_increment($topic_id)
 {
-    DB::query("UPDATE TABLE `ae_topics` SET `view_count` = `view_count` + 1 WHERE `id` = %d", $topic_id);
+    DB::query("UPDATE `ae_topics` SET `view_count` = `view_count` + 1 WHERE `id` = %d", $topic_id);
 }
 
 function db_topic_comment_count_increment($topic_id)
 {
-    DB::query("UPDATE TABLE `ae_topics` SET `comment_count` = `comment_count` + 1 WHERE `id` = %d", $topic_id);
+    DB::query("UPDATE `ae_topics` SET `comment_count` = `comment_count` + 1 WHERE `id` = %d", $topic_id);
 }
 
 function db_topic_comment_count_minus($topic_id)
 {
-    DB::query("UPDATE TABLE `ae_topics` SET `comment_count` = `comment_count` - 1 WHERE `id` = %d", $topic_id);
+    DB::query("UPDATE `ae_topics` SET `comment_count` = `comment_count` - 1 WHERE `id` = %d", $topic_id);
 }
 
 function db_topic_delete($topic_id)

@@ -10,6 +10,7 @@ require_once 'class-category.php';
 require_once 'class-topic.php';
 require_once 'class-notification.php';
 require_once 'class-plugin.php';
+require_once 'htmLawed.php';
 
 // include configuration file
 require_once __DIR__ . '/../config.php';

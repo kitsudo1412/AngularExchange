@@ -162,4 +162,8 @@ final class AE_Topic
     {
 
     }
+
+    public function update_statistics() {
+        
+    }
 }

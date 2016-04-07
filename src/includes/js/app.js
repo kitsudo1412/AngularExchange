@@ -168,6 +168,18 @@ app.factory('LoadPosts', ['$http', 'TopicFactory', function ($http, TopicFactory
         }.bind(this));
     };
 
+    LoadPosts.prototype.addCustomPost = function(post_id, post_topic, post_author, post_content, post_created, post_modified, post_like_count) {
+        this.items.push(new TopicFactory({
+            id: post_id,
+            topic: post_topic,
+            author: post_author,
+            content: post_content,
+            created: post_created,
+            modified: post_modified,
+            like_count: post_like_count
+        }));
+    };
+
     return LoadPosts;
 }]);
 
@@ -309,11 +321,28 @@ app.controller('categoryController', ['$scope', '$resource', '$routeParams', fun
     });
 }]);
 
-app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', function ($scope, ComposerSharedData, $http) {
+app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', 'LoadPosts', function ($scope, ComposerSharedData, $http, LoadPosts) {
     $scope.is_open = ComposerSharedData.isComposerShown();
     $scope.target_topic = {};
     $scope.target_id = 0;
-    $scope.message = "Default message";
+    $scope.message = "";
+
+    $scope.submit = function() {
+        $http({
+            method: 'POST',
+            url: 'json/q.php',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param({
+                type: "post",
+                topic: $scope.target_id,
+                content: $scope.message
+            })
+        });
+
+        $scope.message = "";
+        ComposerSharedData.setComposerShown(false);
+
+    };
 
     $scope.$watch(function () {
         return ComposerSharedData.isComposerShown();
@@ -334,7 +363,6 @@ app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', f
                 params: {type: 'topic', id: $scope.target_id}
             }).then(function (response) {
                 $scope.target_topic = response.data;
-                console.log($scope.target_topic);
             }, function () {
             });
         }
