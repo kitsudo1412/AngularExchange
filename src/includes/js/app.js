@@ -1,5 +1,5 @@
 // MODULE
-var app = angular.module('angularExchangeApp', ['ngRoute', 'ngResource', 'infinite-scroll', 'ngSanitize', 'textAngular']);
+var app = angular.module('angularExchangeApp', ['ngRoute', 'ngResource', 'infinite-scroll', 'ngSanitize', 'textAngular', 'ngMaterial']);
 
 // ROUTES
 app.config(function ($routeProvider, $locationProvider) {
@@ -19,6 +19,11 @@ app.config(function ($routeProvider, $locationProvider) {
         .when('/category/:id/:slug?', {
             templateUrl: 'frontend/pages/category.html',
             controller: 'categoryController'
+        })
+
+        .when('/user/:id', {
+            templateUrl: 'frontend/pages/user.html',
+            controller: 'userController'
         });
 
     $locationProvider.html5Mode(true);
@@ -147,6 +152,7 @@ app.factory('LoadPosts', ['$http', 'TopicFactory', function ($http, TopicFactory
         this.topic_id = topic_id;
         this.items = [];
         this.busy = false;
+        this.stop = false;
         this.after = 0;
     };
 
@@ -154,7 +160,7 @@ app.factory('LoadPosts', ['$http', 'TopicFactory', function ($http, TopicFactory
         if (this.busy) return;
         this.busy = true;
 
-        var url = "json/q.php?type=topic&show_posts=1&id=" + this.topic_id + "&limit=3&offset=" + this.after;
+        var url = "json/q.php?type=topic&show_posts=1&id=" + this.topic_id + "&limit=10&offset=" + this.after;
 
         $http({method: 'GET', url: url}).success(function (data) {
             var items = data.posts;
@@ -167,7 +173,7 @@ app.factory('LoadPosts', ['$http', 'TopicFactory', function ($http, TopicFactory
 
             this.busy = false;
 
-            // this.busy = items.length == 0;
+            this.stop = items.length == 0;
         }.bind(this));
     };
 
@@ -217,10 +223,55 @@ app.factory('TopicFactory', ['$sce', '$http', function ($sce, $http) {
     return TopicFactory;
 }]);
 
+app.factory('LoadTopics', ['$sce', '$http', 'CategoryFactory', function ($sce, $http, CategoryFactory) {
+    var LoadTopics = function (category_id) {
+        this.category_id = category_id;
+        this.items = [];
+        this.busy = false;
+        this.stop = false;
+        this.after = 0;
+    };
+
+    LoadTopics.prototype.nextPage = function () {
+        if (this.busy) return LoadTopics;
+        this.busy = true;
+
+        var url = "json/q.php?type=category&show_topics=1&show_posts=1&id=" + this.category_id + "&limit=20&offset=" + this.after;
+
+        $http({method: 'GET', url: url}).success(function (data) {
+            var items = data.topics;
+
+            for (var i = 0; i < items.length; i++) {
+                var categoryService = new CategoryFactory(items[i]);
+                this.items.push(categoryService);
+            }
+            this.after = this.items.length;
+
+            this.busy = false;
+            this.stop = items.length == 0;
+        }.bind(this));
+    };
+
+    return LoadTopics;
+}]);
+
+app.factory('CategoryFactory', ['$http', function ($http) {
+    function CategoryFactory(json_attr_array) {
+        for (var json_attr in json_attr_array) {
+            if (json_attr_array.hasOwnProperty(json_attr))
+                this[json_attr] = json_attr_array[json_attr];
+        }
+    }
+
+    return CategoryFactory;
+}]);
+
 app.factory('ComposerSharedData', function () {
     var data = {
         show: false,
-        target_topic: 0
+        target_topic: 0,
+        target_category: 0,
+        is_reply: true
     };
 
     return {
@@ -237,6 +288,22 @@ app.factory('ComposerSharedData', function () {
 
         setTargetTopic: function (topic_id) {
             data.target_topic = topic_id;
+        },
+
+        getTargetCategory: function () {
+            return data.target_category;
+        },
+
+        setTargetCategory: function (target_category) {
+            data.target_category = target_category;
+        },
+
+        isReply: function () {
+            return data.is_reply;
+        },
+
+        setReply: function (is_reply) {
+            data.is_reply = is_reply;
         }
     }
 });
@@ -307,10 +374,11 @@ app.controller('topicController', ['$scope', '$resource', '$routeParams', '$http
     $scope.reply = function () {
         ComposerSharedData.setTargetTopic($scope.topic.id);
         ComposerSharedData.setComposerShown(true);
+        ComposerSharedData.setReply(true);
     }
 }]);
 
-app.controller('categoryController', ['$scope', '$resource', '$routeParams', function ($scope, $resource, $routeParams) {
+app.controller('categoryController', ['$scope', '$resource', '$routeParams', 'LoadTopics', 'ComposerSharedData', function ($scope, $resource, $routeParams, LoadTopics, ComposerSharedData) {
     $scope.categoryId = ($routeParams.id) ? $routeParams.id : 0;
 
     $scope.categoryAPI = $resource("json/q.php");
@@ -325,29 +393,64 @@ app.controller('categoryController', ['$scope', '$resource', '$routeParams', fun
     $scope.categoryList = $scope.categoryAPI.get({
         type: 'category'
     });
+
+    $scope.topics = new LoadTopics($scope.categoryId);
+
+    $scope.newTopic = function () {
+        ComposerSharedData.setTargetCategory($scope.categoryId);
+        ComposerSharedData.setComposerShown(true);
+        ComposerSharedData.setReply(false);
+    }
 }]);
 
 app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', 'LoadPosts', function ($scope, ComposerSharedData, $http, LoadPosts) {
     $scope.is_open = ComposerSharedData.isComposerShown();
     $scope.target_topic = {};
+    $scope.categories = {};
     $scope.target_id = 0;
+    $scope.is_reply = ComposerSharedData.isReply();
+    $scope.title = "";
     $scope.message = "";
 
     $scope.submit = function () {
-        $http({
-            method: 'POST',
-            url: 'json/q.php',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            data: $.param({
-                type: "post",
-                topic: $scope.target_id,
-                content: $scope.message
-            })
-        });
+        if ($scope.is_reply) {
+            $http({
+                method: 'POST',
+                url: 'json/q.php',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({
+                    type: "post",
+                    topic: $scope.target_id,
+                    content: $scope.message
+                })
+            });
+        }
+        else {
+            $http({
+                method: 'POST',
+                url: 'json/q.php',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param({
+                    type: "topic",
+                    category: $scope.target_id,
+                    title: $scope.title,
+                    content: $scope.message
+                })
+            });
+        }
+
 
         $scope.message = "";
         ComposerSharedData.setComposerShown(false);
     };
+
+    $http({
+        method: 'get',
+        url: 'json/q.php',
+        params: {type: 'category'}
+    }).then(function(response) {
+            $scope.categories = response.data.categories;
+    }, function() {});
 
     $scope.$watch(function () {
         return ComposerSharedData.isComposerShown();
@@ -371,6 +474,39 @@ app.controller('composerController', ['$scope', 'ComposerSharedData', '$http', '
             }, function () {
             });
         }
+    });
+
+    $scope.$watch(function () {
+        return ComposerSharedData.getTargetCategory();
+    }, function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+            $scope.target_id = newValue;
+        }
+    });
+
+    $scope.$watch(function () {
+        return ComposerSharedData.isReply();
+    }, function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+            $scope.is_reply = newValue;
+        }
+    });
+}]);
+
+app.controller('userController', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+    $scope.user_id = ($routeParams.id) | 0;
+
+    $http({
+        method: 'GET',
+        url: 'json/q.php',
+        params: {
+            type: 'user',
+            id: $scope.user_id
+        }
+    }).then(function (response) {
+        $scope.user = response.data;
+        console.log(response.data);
+    }, function () {
     });
 }]);
 

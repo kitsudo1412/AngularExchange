@@ -2,7 +2,8 @@
     <div id="topic-title" data-topic-id="{{ topic.id }}" ng-init="getAllData()">
         <h1>
             <a href="topic/{{ topic.id }}/{{ topic.slug }}">
-                <span class="private-message-glyph" data-ng-show="topic.is_private_message == '1'"><i class="fa fa-envelope"></i></span>
+                <span class="private-message-glyph" data-ng-show="topic.is_private_message == '1'"><i
+                        class="fa fa-envelope"></i></span>
                 {{ topic.title }}
             </a>
         </h1>
@@ -13,10 +14,17 @@
             </a>
         </div>
     </div>
-
-    <div infinite-scroll='posts.nextPage()' infinite-scroll-disabled='posts.busy' infinite-scroll-distance='1'>
-        <post-detail class="topic-post" ng-repeat='item in posts.items' item="item" category="category" topic-active-users="topicActiveUsers" first-item="$index == 0"></post-detail>
-        <div ng-show='posts.busy'>Loading data...</div>
+    <div class="infinite-scroll-container">
+        <div infinite-scroll='posts.nextPage()' infinite-scroll-disabled='posts.busy || posts.stop' infinite-scroll-distance='0'
+             infinite-scroll-container='".infinite-scroll-container"' infinite-scroll-parent="true">
+            <post-detail class="topic-post" ng-repeat='item in posts.items' item="item" category="category"
+                         topic-active-users="topicActiveUsers" first-item="$index == 0"></post-detail>
+            <div ng-show='posts.busy'>
+                <div layout="row" layout-sm="column" layout-align="space-around bottom center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="topic-footer">
@@ -35,7 +43,8 @@
                         class="fa fa-flag"></i>Flag
                 </button>
                 <button id="ember2127" class="ember-view btn btn-primary create standard"
-                        title="begin composing a reply to this topic" data-ng-click="reply()"><i class="fa fa-reply"></i>Reply
+                        title="begin composing a reply to this topic" data-ng-click="reply()"><i
+                        class="fa fa-reply"></i>Reply
                 </button>
             </div>
         </div>

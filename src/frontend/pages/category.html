@@ -1,4 +1,4 @@
-<div ng-controller="categoryController">
+<div class="category" ng-controller="categoryController">
     <div id="category-select">
         <div class="current-category" data-ng-click="showCategoryList = !showCategoryList"><span class="one-line">{{ categoryJSON.id == 0 ? 'all categories' : categoryJSON.name }} <i
                 class="fa fa-caret-down"></i></span></div>
@@ -10,21 +10,34 @@
                 {{ category.name }}</a>
         </div>
     </div>
+    <button id="create-topic" class="right btn btn-default" data-ng-click="newTopic()"><i class="fa fa-plus"></i>New Topic</button>
     <div class="clear"></div>
-    <ul class="list-group topic-list">
-        <li href="#" class="list-group-item row">
-            <div class="col-xs-5"><strong>Topic title</strong></div>
-            <div class="col-xs-2"><strong>Category</strong></div>
-            <div class="col-xs-2"><strong>Users</strong></div>
-            <div class="col-xs-1"><strong>Replies</strong></div>
-            <div class="col-xs-1"><strong>Views</strong></div>
-            <div class="col-xs-1"><strong>Activity</strong></div>
-        </li>
-        <li category-topic-item data-last-activity="{{ lastActivity }}" data-topic="t" data-category="{{ category }}"
-            data-category-slug="{{ categoryJSON.slug }}" data-category-name="{{ categoryJSON.name }}"
-            data-ng-repeat="t in categoryJSON.topics" data-func-get-active-users="getActiveUsers(u1, u2, u3, u4)"
-            data-get-activity-display-date="getActivityDisplayDate(c)" data-current="current"></li>
-        <li class="list-group-item row" data-ng-show="!categoryJSON.topics.length">There is no topic in this category
-        </li>
-    </ul>
+    <div class="infinite-scroll-container">
+        <ul infinite-scroll="topics.nextPage()" infinite-scroll-disabled="topics.busy || topics.stop" infinite-scroll-distance="0"
+            class="list-group topic-list" infinite-scroll-container='".infinite-scroll-container"' infinite-scroll-parent="true">
+            <li href="#" class="list-group-item row">
+                <div class="col-xs-5"><strong>Topic title</strong></div>
+                <div class="col-xs-2"><strong>Category</strong></div>
+                <div class="col-xs-2"><strong>Users</strong></div>
+                <div class="col-xs-1"><strong>Replies</strong></div>
+                <div class="col-xs-1"><strong>Views</strong></div>
+                <div class="col-xs-1"><strong>Activity</strong></div>
+            </li>
+            <li category-topic-item data-last-activity="{{ lastActivity }}" data-topic="t"
+                data-category="{{ category }}"
+                data-category-slug="{{ categoryJSON.slug }}" data-category-name="{{ categoryJSON.name }}"
+                data-ng-repeat="t in topics.items" data-func-get-active-users="getActiveUsers(u1, u2, u3, u4)"
+                data-get-activity-display-date="getActivityDisplayDate(c)" data-current="current"></li>
+
+            <li class="list-group-item row" data-ng-show="!categoryJSON.topics.length">There is no topic in this
+                category
+            </li>
+
+            <div ng-show="topics.busy">
+                <div layout="row" layout-sm="column" layout-align="space-around bottom center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+        </ul>
+    </div>
 </div>

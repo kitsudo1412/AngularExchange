@@ -151,6 +151,7 @@ li.list-group-item div.views {
     position: relative;
     cursor: pointer;
     line-height: 20px;
+    float: left;
 }
 
 #category-select .current-category {
@@ -591,4 +592,388 @@ body.composer-padding {
 
 post-detail {
     display: block;
+}
+
+.user-main {
+    margin-bottom: 50px;
+}
+
+.user-main .about {
+    background-position: center center;
+    background-size: cover;
+    width: 100%;
+    overflow: hidden;
+}
+
+.user-main .staff-counters {
+    text-align: left;
+    background: #222;
+    color: #fff;
+}
+
+.profile-image {
+    height: 420px;
+    width: 100%;
+    background-size: cover;
+    transition: height .15s linear;
+}
+
+.no-background .profile-image {
+    height: 200px;
+}
+
+.user-main .about .details {
+    padding: 15px 15px 4px 15px;
+    margin-top: -200px;
+    background: rgba(34,34,34,0.85);
+    transition: margin .15s linear;
+}
+
+.user-main .about .details .primary {
+    width: 100%;
+    position: relative;
+    float: left;
+    color: #fff;
+}
+
+.user-main .about .details img.avatar {
+    margin: 0 20px 10px 0;
+    float: left;
+    transition: all .1s linear;
+}
+
+.user-main .about .controls {
+    padding: 0 0 12px 0;
+    float: right;
+    text-align: right;
+    width: 180px;
+}
+
+.user-main .about .controls ul {
+    list-style-type: none;
+}
+
+.user-main .about .controls a {
+    padding: 5px 10px;
+    width: 140px;
+    margin-bottom: 10px;
+}
+
+.user-main .about .details .primary .primary-textual {
+    padding: 3px;
+}
+
+.user-main .about .details h1 {
+    font-size: 2.143em;
+    font-weight: normal;
+}
+
+.user-main .about .details .primary h1 {
+    font-weight: bold;
+}
+
+.user-main .about .details h2 {
+    font-size: 1.214em;
+    font-weight: normal;
+    margin-top: 10px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+section.about h3 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.user-main .about .details h3 {
+    font-weight: normal;
+    font-size: 1em;
+    margin: 5px 0;
+}
+
+.user-main .about .details .primary .bio {
+    color: #fff;
+    max-height: 300px;
+    overflow: auto;
+    max-width: 750px;
+}
+
+.user-main .about .secondary {
+    background: #e9e9e9;
+    font-size: 0.929em;
+}
+
+.user-main .about .secondary dl {
+    margin: 0;
+    padding: 8px 10px;
+}
+
+.user-main .about .secondary dt {
+    color: #999;
+    margin: 0;
+}
+
+.user-main .about .secondary dd {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #222;
+}
+
+.user-main .about .secondary dl dt {
+    display: inline-block;
+    margin: 0 5px 0 0;
+    padding: 0;
+}
+
+.user-main .about .secondary dl dd {
+    display: inline;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+span.relative-date {
+    white-space: nowrap;
+}
+
+.nav-pills, .nav-stacked {
+    margin-left: 0;
+    list-style: none;
+}
+
+.user-nav {
+    margin: 5px 0px;
+}
+
+.nav-pills>li {
+    float: left;
+    margin-right: 5px;
+}
+
+.nav-pills>li>a, .nav-stacked>li>a {
+    display: block;
+    text-decoration: none;
+}
+
+.nav-pills>li>a {
+    border: none;
+    padding: 5px 12px;
+    color: #222;
+    font-size: 1.143em;
+    line-height: 20px;
+    transition: background .15s;
+}
+
+.user-main .nav-pills a {
+    color: #7a7a7a;
+}
+
+.nav-pills>li.active>a, .nav-pills>li>a.active {
+    color: #fff;
+    background-color: #e45735;
+}
+
+.user-table {
+    margin-top: 30px;
+    width: 100%;
+    display: table;
+}
+
+.user-table .wrapper {
+    display: table-row;
+}
+
+.user-navigation {
+    display: table-cell;
+    vertical-align: top;
+    width: 170px;
+    padding-right: 30px;
+}
+
+.nav-stacked {
+    padding: 0;
+    overflow: hidden;
+    background: #e9e9e9;
+}
+
+.user-main .nav-stacked {
+    background-color: transparent;
+}
+
+.nav-stacked>li {
+    border-bottom: 1px solid #d3d3d3;
+    position: relative;
+}
+
+.user-main .nav-stacked>li {
+    border-bottom: none;
+}
+.nav-pills>li>a, .nav-stacked>li>a {
+    display: block;
+    text-decoration: none;
+}
+
+.nav-stacked>li>a {
+    margin: 0;
+    padding: 13px 13px 13px 30px;
+    font-size: 1.143em;
+    line-height: 20px;
+    cursor: pointer;
+    color: #222;
+}
+
+.nav-stacked .active>a, .nav-stacked li>a.active {
+    color: #fff;
+    background-color: #e45735;
+}
+
+.user-main .nav-stacked>li>a {
+    padding: 8px 13px;
+    color: #7a7a7a;
+}
+
+.user-main .nav-stacked li>a.active {
+    color: #222;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.user-main .user-right {
+    max-width: 700px;
+    margin-top: 20px;
+    display: table-cell;
+}
+
+.user-main .user-stream .item {
+    padding: 20px 8px 15px 8px;
+    background-color: #fff;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.user-main .user-stream .excerpt {
+    margin: 5px 0;
+    font-size: 0.929em;
+    word-wrap: break-word;
+    color: #222;
+}
+
+.user-main .user-stream .item {
+    padding: 20px 8px 15px 8px;
+    background-color: #fff;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.user-main .user-stream .avatar-link {
+    float: left;
+    margin-right: 4px;
+}
+
+body .avatar-wrapper {
+    background-color: #fff;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.user-main .user-stream .time, .user-main .user-stream .delete-info {
+    display: block;
+    float: right;
+    color: #888;
+    margin-right: 8px;
+    font-size: 11px;
+}
+
+.user-main .user-stream .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.badge-wrapper.bullet .badge-category-parent-bg, .badge-wrapper.bullet .badge-category-bg {
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    display: inline-block;
+    line-height: 1;
+}
+.badge-wrapper.bullet .badge-category-parent-bg:before, .badge-wrapper.bullet .badge-category-bg:before {
+    content: "\a0";
+}
+
+.badge-wrapper.bullet span.badge-category {
+    color: #222 !important;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-main a.trigger-user-card {
+    color: #fff;
+    display: inline-block;
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    line-height: 120px;
+    text-align: center;
+    font-size: 70px;
+    float: left;
+    margin-right: 10px;
+}
+
+.top-section, .replies-section, .topics-section {
+    margin-bottom: 20px;
+}
+
+
+.top-section:before, .top-section:after {
+    content: "";
+    display: table;
+}
+
+.stats-title {
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.top-section ul {
+    list-style: none;
+    margin: 0;
+}
+
+.stats-section ul {
+    margin: 10px 0;
+}
+
+.stats-section li {
+    display: inline-block;
+    padding: 10px 14px;
+    margin: 0 5px 10px 0;
+    background: #e9e9e9;
+}
+
+.stats-section .value {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.stats-section .label {
+    color: #919191;
+}
+
+.top-section:before, .top-section:after {
+    content: "";
+    display: table;
+}
+
+.top-section:after {
+    clear: both;
+}
+
+.right.btn {
+    float: right;
+    margin-left: 8px;
+    margin-bottom: 10px;
+    font-size: 1.143em;
+    font-weight: normal;
 }

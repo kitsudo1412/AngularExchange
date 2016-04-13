@@ -1,0 +1,182 @@
+<div ng-controller="userController">
+    <section class="user-main">
+        <section class=" about no-background">
+            <div class="staff-counters"></div>
+
+            <div class="profile-image"></div>
+            <div class="details">
+                <div class="primary">
+                    <a class="trigger-user-card main-avatar" href="user/{{ item.author.id }}"
+                       data-user-card="{{ item.author.id }}" style="background-color: {{ user.id | textToColor }}">{{ user.display_name | firstChar }}</a>
+                    <section class="controls">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary" data-ember-action="2149">
+                                    <i class="fa fa-envelope"></i>
+                                    Message
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <div class="primary-textual">
+                        <h1>{{ user.display_name }}</h1>
+                        <h2>{{ user.login }}</h2>
+
+                        <div class="bio">
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+
+
+            <div class="secondary">
+                <dl>
+                    <dt>Joined</dt>
+                    <dd><span class="relative-date date" title="April 12, 2016 12:55pm" data-time="1460440546399"
+                              data-format="medium">4 hours</span></dd>
+                    <dt>Last Post</dt>
+                    <dd><span class="relative-date date" title="April 12, 2016 1:13pm" data-time="1460441581087"
+                              data-format="medium">4 hours</span></dd>
+                    <dt>Seen</dt>
+                    <dd><span class="relative-date date" title="April 12, 2016 1:22pm" data-time="1460442127658"
+                              data-format="medium">3 hours</span></dd>
+                    <dt>Views</dt>
+                    <dd>0</dd>
+                    <dt class="trust-level">Trust Level</dt>
+                    <dd class="trust-level">basic user</dd>
+                </dl>
+            </div>
+        </section>
+
+        <ul id="ember2148" class="nav nav-pills user-nav">
+            <li><a id="ember2152" class="ember-view active" href="/users/olmi/activity">Activity</a></li>
+            <li><a id="ember2153" class="ember-view" href="/users/olmi/summary">Summary</a></li>
+        </ul>
+
+        <div class="top-section stats-section">
+            <h3 class="stats-title">Stats</h3>
+            <ul>
+                <li>
+                    <span class="value">28m</span>
+                    <span class="label">read time</span>
+                </li>
+                <li>
+                    <div id="ember2352" class="ember-view user-stat">
+                        <span class="value"><span class="number" title="1">{{ user.topic_count }}</span></span>
+                        <span class="label">topic created</span>
+                    </div>
+                </li>
+                <li>
+                    <div id="ember2353" class="ember-view user-stat">
+                        <span class="value"><span class="number" title="2">{{ user.post_count }}</span></span>
+                        <span class="label">posts created</span>
+                    </div>
+                </li>
+                <li>
+                    <div id="ember2354" class="ember-view user-stat"><span class="value">
+  <span class="number" title="0">{{ user.likes_received }}</span>
+</span>
+                        <span class="label">likes received</span>
+                    </div>
+                </li>
+                <li>
+                    <div id="ember2355" class="ember-view user-stat"><span class="value">
+  <span class="number" title="0">{{ user.likes_given }}</span>
+</span>
+                        <span class="label">likes given</span>
+                    </div>
+                </li>
+                <li>
+                    <div id="ember2356" class="ember-view user-stat"><span class="value">
+  <span class="number" title="1">1</span>
+</span>
+                        <span class="label">day visited</span>
+                    </div>
+                </li>
+                <li>
+                    <div id="ember2357" class="ember-view user-stat">
+                        <span class="value"><span class="number" title="19">19</span></span>
+                        <span class="label">posts read</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="user-table">
+            <div class="wrapper">
+                <section class="user-navigation">
+                    <ul id="ember2170" class="action-list activity-list nav-stacked">
+                        <li class="no-glyph">
+                            <a id="ember2174" class="ember-view active" href="/users/olmi/activity">All</a>
+                        </li>
+                        <li class="no-glyph">
+                            <a id="ember2175" class="ember-view" href="/users/olmi/activity/topics">Topics</a>
+                        </li>
+                        <li>
+                            <a id="ember2176" class="ember-view" href="/users/olmi/activity/replies">Replies
+                            </a></li>
+                        <li>
+                            <a id="ember2177" class="ember-view" href="/users/olmi/activity/likes-given">Likes Given
+                            </a></li>
+                    </ul>
+                </section>
+
+                <section class="user-right">
+                    <div id="ember2230" class="ember-view user-stream">
+                        <div id="ember2239" class="ember-view item">
+                            <div class="clearfix info">
+                                <a class="avatar-link" href="/users/olmi" data-user-card="olmi">
+                                    <div class="avatar-wrapper"><img alt="" width="45" height="45"
+                                                                     src="https://avatars.discourse.org/v2/letter/o/57b2e6/45.png"
+                                                                     class="avatar actor" title="olmi"></div>
+                                </a>
+                                <span class="time"><span class="relative-date date" title="April 12, 2016 1:13pm"
+                                                         data-time="1460441581087"
+                                                         data-format="medium">4 hours</span></span>
+                                <div id="ember2240" class="ember-view topic-statuses"></div>
+  <span class="title">
+    <a href="/t/discourse-as-a-q-a-tool/377/2">Discourse as a Q&amp;A tool?</a>
+  </span>
+                                <div class="category"><a class="badge-wrapper bullet" href="/c/discourse"><span
+                                        class="badge-category-bg" style="background-color: #00B355;"></span><span
+                                        style="color: #FFFFFF;" data-drop-close="true"
+                                        class="badge-category clear-badge"
+                                        title="Topics about the Discourse forum software itself: how it works, how to use it, discussion about culture, UI, and design.">discourse</span></a>
+                                </div>
+                            </div>
+                            <p class="excerpt">And what are the tools for moderating the discussions?</p>
+
+                        </div>
+                        <div id="ember2243" class="ember-view item">
+                            <div class="clearfix info">
+                                <a class="avatar-link" href="/users/olmi" data-user-card="olmi">
+                                    <div class="avatar-wrapper"><img alt="" width="45" height="45"
+                                                                     src="https://avatars.discourse.org/v2/letter/o/57b2e6/45.png"
+                                                                     class="avatar actor" title="olmi"></div>
+                                </a>
+                                <span class="time"><span class="relative-date date" title="April 12, 2016 1:09pm"
+                                                         data-time="1460441388012"
+                                                         data-format="medium">4 hours</span></span>
+                                <div id="ember2244" class="ember-view topic-statuses"></div>
+  <span class="title">
+    <a href="/t/discourse-as-a-q-a-tool/377">Discourse as a Q&amp;A tool?</a>
+  </span>
+                                <div class="category"><a class="badge-wrapper bullet" href="/c/discourse"><span
+                                        class="badge-category-bg" style="background-color: #00B355;"></span><span
+                                        style="color: #FFFFFF;" data-drop-close="true"
+                                        class="badge-category clear-badge"
+                                        title="Topics about the Discourse forum software itself: how it works, how to use it, discussion about culture, UI, and design.">discourse</span></a>
+                                </div>
+                            </div>
+                            <p class="excerpt">How about having Discourse as basis for a Questions and Answers -forum or
+                                similar type of usage? Any experiences and ideas?</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
